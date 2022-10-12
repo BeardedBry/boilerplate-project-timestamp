@@ -26,7 +26,11 @@ app.get("/api/hello", function (req, res) {
 
 function makeDate(date){
   const newDate = new Date(date);
-  
+
+  if(newDate == "Invalid Date"){
+    return {error: "Invalid Date"}
+  }
+
   return {
     unix: newDate.getTime(),
     utc: newDate.toUTCString()
@@ -39,6 +43,13 @@ app.get("/api/:date([0-9]{4}[\/\-][0-9]{2}[\/\-][0-9]{2})", function (req, res) 
 
 app.get("/api/:date(\\d+)", function (req, res) {
   res.json(makeDate(Number(req.params.date, 10)))
+})
+
+app.get("/api/:date(*)", function (req, res) {
+  if (!req.params.date){
+    res.json(makeDate(new Date()))
+  }
+  res.json(makeDate(req.params.date));
 })
 
 // listen for requests :)
