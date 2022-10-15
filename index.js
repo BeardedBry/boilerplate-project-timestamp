@@ -37,6 +37,14 @@ function makeDate(date){
   };
 }
 
+app.get("/api/whoami", function (req, res) {
+  const ip = req.headers['x-forwarded-for'];
+  const language = req.headers['accept-language'];
+  const software = req.headers['user-agent'];
+  // console.log('req', req);
+  res.json({'ip': ip, 'language': language, 'software': software})
+});
+
 app.get("/api/:date([0-9]{4}[\/\-][0-9]{2}[\/\-][0-9]{2})", function (req, res) {
   res.json(makeDate(req.params.date))
 })
@@ -51,6 +59,7 @@ app.get("/api/:date(*)", function (req, res) {
   }
   res.json(makeDate(req.params.date));
 })
+
 
 // listen for requests :)
 // var listener = app.listen(process.env.PORT, function () {
